@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SearchRowView: View {
+    @State var issaved: Bool = false
+    
     let imageUrl: String?
     let title: String?
     let publisher: String?
@@ -32,6 +34,17 @@ struct SearchRowView: View {
                 Text(publisher ?? "")
                     .font(.caption)
             }
+            
+            Spacer()
+            
+            Button(action: {
+                guard !issaved else { return }
+                let newBook = BookSummary(id: UUID().uuidString, title: title ?? "",thumbnail: imageUrl)
+                SwiftDataManager().saveItem(data: newBook)
+                issaved = true
+            }, label: {
+                Image(systemName: issaved ? "checkmark.circle.fill" : "plus.circle")
+            })
         }
         .frame(minHeight: 100)
     }
